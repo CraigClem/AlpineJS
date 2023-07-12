@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        .delete:hover {
+            cursor: pointer;
+        }
+
+        .completed {
+            text-decoration: line-through;
+        }
+
+    </style>
+    </head>
+</head>
+<body>
+    <!-- x-data is where we decalre the componets state using objects -->
+    <div x-data="{todos:[], userInput: ''}">
+        <form 
+            x-on:submit.prevent
+        >
+        <!-- x-model allows you to bind the value of an iput element to alpine data (userInput) -->
+            <input  
+                x-model="userInput" 
+                placeholder="add a todo item" 
+                type="text"
+            >
+            <button 
+                @click="
+                    if(userInput.trim().length) 
+                    todos.push({name: userInput, completed: false }); 
+                    userInput=''
+                "
+            >
+                Add
+            </button>
+        </form>
+        <!-- x-text binds the state, userInput and displays in the broswer as a paragraph  -->
+        <p x-text="userInput"></p>
+        <!-- For loop -->
+            <template x-for="todo in todos">
+                <div>
+                    <input 
+                        type="checkbox"
+                        x-model="todo.completed"
+
+                    >
+                    <!-- xbind class can also remove e-binf and use :class{'name of class': condition to check against} -->
+                    <span 
+                        x-text="todo.name";
+                        x-bind:class="{'completed':todo.completed}"
+                    >
+                    </span>
+                    <button
+                        @click="todos = todos.filter(currentTodo => todo !== currentTodo)" class="delete">X</button>
+                </div>
+            </template>
+            <span x-text="todos.filter((todo) => todo.completed).length"></span>
+            <span>/</span>
+            <span x-text="todos.length"></span>
+            <span>Todos Completed</span>
+            <!-- x-show render an element based on a condition -->
+            <button 
+                @click="todos=[]"
+                x-show="todos.length > 1"
+            >
+                Delete All
+            </button>
+        
+    </div>
+</body>
+</html> 
